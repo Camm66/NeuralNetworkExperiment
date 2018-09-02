@@ -16,7 +16,7 @@ def networkSetup():
     pass
 
 def trainingData(n, output_nodes):
-    data_file = open("TrainingData/mnist_train_100.csv", 'r')
+    data_file = open("TrainingData/mnist_train.csv", 'r')
     training_data = []
     line = data_file.readline()
     while line:
@@ -37,7 +37,7 @@ def trainingData(n, output_nodes):
     pass
 
 def testingData(n):
-    data_file = open("TrainingData/mnist_test_10.csv", 'r')
+    data_file = open("TrainingData/mnist_test.csv", 'r')
     testing_data = []
     line = data_file.readline()
     while line:
@@ -61,7 +61,13 @@ def testingData(n):
         else:
             scoreboard.append(0)
 
+    numCorrect = 0
+    for num in scoreboard:
+        if num == 1:
+            numCorrect += 1
     print(scoreboard)
+    successRate = (numCorrect / float(len(scoreboard))) * 100
+    print("Success rate: %s" % successRate)
     pass
 
 
