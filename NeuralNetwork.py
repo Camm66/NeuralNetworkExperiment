@@ -2,7 +2,7 @@ import numpy
 import scipy.special
 
 import matplotlib.pyplot
-%matplotlib inline
+#%matplotlib inline
 
 def networkSetup():
     input_nodes = 784
@@ -10,10 +10,12 @@ def networkSetup():
     output_nodes = 10
     learning_rate = 0.3
     n = neuralNetwork(input_nodes, hidden_nodes, output_nodes, learning_rate)
-    readTrainingData(n, output_nodes)
+
+    trainingData(n, output_nodes)
+    testingData(n)
     pass
 
-def readTrainingData(n, output_nodes):
+def trainingData(n, output_nodes):
     data_file = open("TrainingData/mnist_train_100.csv", 'r')
     training_data = []
     line = data_file.readline()
@@ -33,6 +35,35 @@ def readTrainingData(n, output_nodes):
 
     n.train(scaled_input, target_values)
     pass
+
+def testingData(n):
+    data_file = open("TrainingData/mnist_test_10.csv", 'r')
+    testing_data = []
+    line = data_file.readline()
+    while line:
+        testing_data.append(line)
+        line = data_file.readline()
+    data_file.close()
+
+    scoreboard = []
+
+    for record in testing_data:
+        all_values = record.split(',')
+        correct_answer = int(all_values[0])
+        print(correct_answer, "correct answer")
+        scaled_input = (numpy.asfarray(all_values[1:]) / 255.0 * 0.99) + 0.01
+        output_values = n.query(scaled_input)
+        network_answer = numpy.argmax(output_values)
+        print(network_answer, "network's answer")
+
+        if (network_answer == correct_answer):
+            scoreboard.append(1)
+        else:
+            scoreboard.append(0)
+
+    print(scoreboard)
+    pass
+
 
 #neural network class definition
 class neuralNetwork:
@@ -58,11 +89,11 @@ class neuralNetwork:
         pass
 
     #train the network
-    def train(self, inputs_list, targets_list):
+    def train(self, input_list, target_list):
         #Convert input values list into a 2d Array
-        inputs = numpy.array(inputs_list, ndmin = 2).T
+        inputs = numpy.array(input_list, ndmin = 2).T
         #Convert target values list into a 2d Array
-        targets = numpy.array(targets_list, ndmin = 2).T
+        targets = numpy.array(target_list, ndmin = 2).T
 
         #Calculate signals going into the Hidden Layer
         hidden_inputs = numpy.dot(self.weightsInputToHidden, inputs)
@@ -90,7 +121,7 @@ class neuralNetwork:
         pass
 
     #query the network
-    def query(self, inputs_list):
+    def query(self, input_list):
         #Convert input list into a 2d Array
         inputs = numpy.array(input_list, ndmin = 2).T
 
