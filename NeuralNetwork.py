@@ -1,5 +1,7 @@
 import numpy
 import scipy.special
+import scipy.ndimage
+import imageio
 import matplotlib.pyplot
 #%matplotlib inline
 
@@ -12,6 +14,7 @@ def networkSetup():
 
     trainingData(n, output_nodes)
     testingData(n)
+    testImage(n)
     pass
 
 def trainingData(n, output_nodes):
@@ -37,8 +40,18 @@ def trainingData(n, output_nodes):
             target_values[int(all_values[0])] = 0.99
 
             n.train(scaled_input, target_values)
+
+            #Train inputs rotated +/- 10 degrees!
+            input_plus10deg = scipy.ndimage.interpolation.rotate(
+                scaled_input.reshape(28,28), 10, cval = 0.01, reshape = False)
+            n.train(input_plus10deg.reshape(784), target_values)
+
+            input_minus10deg = scipy.ndimage.interpolation.rotate(
+                scaled_input.reshape(28,28), -10, cval = 0.01, reshape = False)
+            n.train(input_minus10deg.reshape(784), target_values)
             pass
         pass
+
 
 def testingData(n):
     data_file = open("TrainingData/mnist_test.csv", 'r')
@@ -70,6 +83,24 @@ def testingData(n):
     successRate = (scoreboard_array.sum()/ float(scoreboard_array.size)) * 100
     print("Success rate: %s" % successRate)
     pass
+
+
+def testImage(n):
+    image_num = 3
+
+    img_array = imageio.imread("2828_my_own_3.png", as_gray=True)
+    img_data = 255.0 - img_array.reshape(n.inputNodes)
+    scaled_img_data = (img_data / 255.0 * 0.99) + 0.01
+
+    output_value = n.query(scaled_img_data)
+    network_answer = numpy.argmax(output_value)
+
+    matplotlib.pyplot.imshow(img_data.reshape(28,28), cmap='Greys', interpolation='None')
+
+    print("Queried image: %s" % image_num)
+    print("Network answer: %s" % network_answer)
+    if image_num == network_answer:
+        print("Correct number Identified!")
 
 
 #neural network class definition
