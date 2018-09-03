@@ -1,14 +1,13 @@
 import numpy
 import scipy.special
-
 import matplotlib.pyplot
 #%matplotlib inline
 
 def networkSetup():
     input_nodes = 784
-    hidden_nodes = 100
+    hidden_nodes = 200
     output_nodes = 10
-    learning_rate = 0.3
+    learning_rate = 0.1
     n = neuralNetwork(input_nodes, hidden_nodes, output_nodes, learning_rate)
 
     trainingData(n, output_nodes)
@@ -24,17 +23,22 @@ def trainingData(n, output_nodes):
         line = data_file.readline()
     data_file.close()
 
-    for record in training_data:
-        #Parse the input data, Scale it for use with the network
-        all_values = record.split(',')
-        scaled_input = (numpy.asfarray(all_values[1:]) / 255.0 * 0.99) + 0.01
-        #Set the target array for the node
-        #IE) [0.01, 0.01, 0.01, 0.99, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01] == 3
-        target_values = numpy.zeros(output_nodes) + 0.01
-        target_values[int(all_values[0])] = 0.99
+    #Number of times the training data is run through the network
+    epochs = 5
 
-    n.train(scaled_input, target_values)
-    pass
+    for e in range(epochs):
+        for record in training_data:
+            #Parse the input data, Scale it for use with the network
+            all_values = record.split(',')
+            scaled_input = (numpy.asfarray(all_values[1:]) / 255.0 * 0.99) + 0.01
+            #Set the target array for the node
+            #IE) [0.01, 0.01, 0.01, 0.99, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01] == 3
+            target_values = numpy.zeros(output_nodes) + 0.01
+            target_values[int(all_values[0])] = 0.99
+
+            n.train(scaled_input, target_values)
+            pass
+        pass
 
 def testingData(n):
     data_file = open("TrainingData/mnist_test.csv", 'r')
@@ -50,23 +54,20 @@ def testingData(n):
     for record in testing_data:
         all_values = record.split(',')
         correct_answer = int(all_values[0])
-        print(correct_answer, "correct answer")
+        #print(correct_answer, "correct answer")
         scaled_input = (numpy.asfarray(all_values[1:]) / 255.0 * 0.99) + 0.01
         output_values = n.query(scaled_input)
         network_answer = numpy.argmax(output_values)
-        print(network_answer, "network's answer")
+        #print(network_answer, "network's answer")
 
         if (network_answer == correct_answer):
             scoreboard.append(1)
         else:
             scoreboard.append(0)
 
-    numCorrect = 0
-    for num in scoreboard:
-        if num == 1:
-            numCorrect += 1
-    print(scoreboard)
-    successRate = (numCorrect / float(len(scoreboard))) * 100
+
+    scoreboard_array = numpy.asarray(scoreboard)
+    successRate = (scoreboard_array.sum()/ float(scoreboard_array.size)) * 100
     print("Success rate: %s" % successRate)
     pass
 
