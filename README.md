@@ -27,12 +27,12 @@ The network can query user provided images of handwritten numbers via the `testI
 
 The requesite code changes are provided below in square brackets:
 
-*  Provide the network with the correct answer:
+1.  Provide the correct answer:
 ```
 image_num = [ImageNumberGoesHere]
 ```
 
-* Provide the network with the number to query:
+2. Provide the .png file to query:
 ```
 img_array = imageio.imread("[ImageFileGoesHere]", as_gray=True)
 ```
