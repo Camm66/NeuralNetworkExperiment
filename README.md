@@ -20,5 +20,22 @@ eg:
 2. mnist_train.csv
 3. mnist_test.csv
 
+## Testing user provided images
+The network can query user provided images of handwritten numbers via the `testImage()` method.
+
+* The method should be provided with a 28px by 28px .png file of the handwritten number.
+
+The requesite code changes are provided below in square brackets:
+
+*  Provide the network with the correct answer:
+```
+image_num = [ImageNumberGoesHere]
+```
+
+* Provide the network with the number to query:
+```
+img_array = imageio.imread("[ImageFileGoesHere]", as_gray=True)
+```
+
 ## License
 License information is available in the LICENSE.txt file.
