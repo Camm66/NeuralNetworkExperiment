@@ -10,9 +10,9 @@ From the command line:
 ```
 
 ## The Training and Testing Data
-The data used on this network consists of csv files which can be found [here](https://pjreddie.com/projects/mnist-in-csv/).
-#### [Training Set](https://pjreddie.com/media/files/mnist_train.csv)
-#### [Testing Set](https://pjreddie.com/media/files/mnist_test.csv)
+The data used on this network consists of csv files which can be found [here](https://pjreddie.com/projects/mnist-in-csv/), or directly from the links below.
+##### [Training Set](https://pjreddie.com/media/files/mnist_train.csv)
+##### [Testing Set](https://pjreddie.com/media/files/mnist_test.csv)
 
 ## Files needed to run this program:
 eg:
