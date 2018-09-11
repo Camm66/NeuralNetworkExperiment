@@ -19,6 +19,7 @@ eg:
 1. NeuralNetwork.py
 2. mnist_train.csv
 3. mnist_test.csv
+4. [UserFile].png/jpg -- (must be 28px by 28px)
 
 ## Testing user provided images
 The network can query user provided images of handwritten numbers via the `testImage()` method.
